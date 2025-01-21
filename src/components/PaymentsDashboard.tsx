@@ -12,10 +12,11 @@ const PaymentDashboard: React.FC = () => {
     { id: 3, amount: 200 },
   ]);
   const [target, setTarget] = useState<number | null>(null);
+  const [newTransaction, setNewTransaction] = useState<number | null>(null);
   const [result, setResult] = useState<string>('');
 
   const handleCheckTransactions = () => {
-    if (target === null) return;
+    if (target === null || target < 1) return;
 
     for (let i = 0; i < transactions.length; i++) {
       for (let j = i + 1; j < transactions.length; j++) {
@@ -28,8 +29,13 @@ const PaymentDashboard: React.FC = () => {
     setResult('No matching transactions found.');
   };
 
-  const handleAddTransaction = (id: number, amount: number) => {
-    setTransactions([...transactions, { id, amount }]);
+  const handleAddTransaction = () => {
+    if (
+      newTransaction === null ||
+      newTransaction < 1
+    ) return;
+    const id = transactions.length + 1;
+    setTransactions([...transactions, { id, amount: newTransaction }]);
   };
 
   return (
@@ -42,12 +48,22 @@ const PaymentDashboard: React.FC = () => {
           </li>
         ))}
       </ul>
-      <input
-        type="number"
-        placeholder="Enter target amount"
-        onChange={(e) => setTarget(Number(e.target.value))}
-      />
-      <button onClick={handleCheckTransactions}>Check Transactions</button>
+      <div>
+        <input
+          type="number"
+          placeholder="Enter transaction amount"
+          onChange={(e) => setNewTransaction(Number(e.target.value))}
+        />
+        <button onClick={handleAddTransaction}>Add Transaction</button>
+      </div>
+      <div>
+        <input
+          type="number"
+          placeholder="Enter target amount"
+          onChange={(e) => setTarget(Number(e.target.value))}
+        />
+        <button onClick={handleCheckTransactions}>Check Transactions</button>
+      </div>
       <p>{result}</p>
     </div>
   );
