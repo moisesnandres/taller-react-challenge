@@ -18,14 +18,22 @@ const PaymentDashboard: React.FC = () => {
   const handleCheckTransactions = () => {
     if (target === null || target < 1) return;
 
-    for (let i = 0; i < transactions.length; i++) {
-      for (let j = i + 1; j < transactions.length; j++) {
-        if (transactions[i].amount + transactions[j].amount === target) {
-          setResult(`Transactions ${transactions[i].id} and ${transactions[j].id} add up to ${target}`);
-          return;
-        }
+    // transactions 
+    // first transaction
+    // result = target - transaction
+    // if transaction include result
+    // setResult(`Transactions ${transactions[i].id} and ${transactions[j].id} add up to ${target}`);
+    // exit the loop
+    // else
+    transactions.forEach((transaction, index) => {
+      const otherTrasaction = target - transaction.amount;
+      const result = transactions.slice(index + 1).find((t) => t.amount === otherTrasaction);
+      console.log(result);
+      if (result) {
+        setResult(`Transactions ${transactions[index].id} and ${result.id} add up to ${target}`);
+        return;
       }
-    }
+    });
     setResult('No matching transactions found.');
   };
 
